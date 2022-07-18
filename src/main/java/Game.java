@@ -18,8 +18,6 @@ public class Game implements Runnable {
 
 	private Display display;
 	private Thread thread;
-	private SpriteSheet sheet;
-	private BufferedImage image;
 
 	private final String title;
 	private final int width;
@@ -50,11 +48,11 @@ public class Game implements Runnable {
 	}
 
 	/**
-	 * Crea la ventana y carga los recursos.
+	 * Carga los recursos y crea la ventana.
 	 */
 	private void init() {
-		display = new Display(title, width, height);
 		Assets.init();
+		display = new Display(title, width, height);
 	}
 
 	/**
@@ -82,20 +80,8 @@ public class Game implements Runnable {
 		// Limpia el rectangulo (ventana) usando el color de fondo actual
 		g.clearRect(0, 0, width, height);
 
-		g.drawImage(Assets.dirt, 20, 20, null);
-
 		// Dibuja una imagen
-		// g.drawImage(image, 20, 20, null);
-
-		// Dibuja un perro de color gris utilizando rectangulos
-		/* g.setColor(Color.gray);
-		g.fillRect(30, 50, 80, 15);
-		g.fillRect(20, 55, 10, 5);
-		g.fillRect(30, 60, 7, 15);
-		g.fillRect(39, 60, 5, 15);
-		g.fillRect(98, 60, 5, 15);
-		g.fillRect(105, 60, 5, 15);
-		g.fillRect(105, 40, 13, 13); */
+		g.drawImage(Assets.dirt, 20, 20, null);
 
 		// Hace visible el buffer
 		buffer.show();
