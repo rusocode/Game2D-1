@@ -1,5 +1,5 @@
 import display.Display;
-import gfx.ImageLoader;
+import gfx.*;
 
 import java.awt.*;
 import java.awt.image.*;
@@ -18,7 +18,8 @@ public class Game implements Runnable {
 
 	private Display display;
 	private Thread thread;
-	private BufferedImage testImage;
+	private SpriteSheet sheet;
+	private BufferedImage image;
 
 	private final String title;
 	private final int width;
@@ -49,11 +50,11 @@ public class Game implements Runnable {
 	}
 
 	/**
-	 * Crea la ventana.
+	 * Crea la ventana y carga los recursos.
 	 */
 	private void init() {
 		display = new Display(title, width, height);
-		testImage = ImageLoader.loadImage("/textures/rulo.png");
+		Assets.init();
 	}
 
 	/**
@@ -78,12 +79,15 @@ public class Game implements Runnable {
 		// Obtiene el pincel
 		g = buffer.getDrawGraphics();
 
-		// Limpia el rectangulo usando el color de fondo actual
+		// Limpia el rectangulo (ventana) usando el color de fondo actual
 		g.clearRect(0, 0, width, height);
 
-		g.drawImage(testImage, 20, 20, null);
+		g.drawImage(Assets.dirt, 20, 20, null);
 
-		// Establece el color gris para el perro
+		// Dibuja una imagen
+		// g.drawImage(image, 20, 20, null);
+
+		// Dibuja un perro de color gris utilizando rectangulos
 		/* g.setColor(Color.gray);
 		g.fillRect(30, 50, 80, 15);
 		g.fillRect(20, 55, 10, 5);
