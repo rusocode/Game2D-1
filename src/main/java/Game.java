@@ -1,5 +1,6 @@
 import display.Display;
 import gfx.*;
+import util.FpsTimer;
 
 import java.awt.*;
 import java.awt.image.*;
@@ -18,10 +19,13 @@ public class Game implements Runnable {
 
 	private Display display;
 	private Thread thread;
+	private FpsTimer timer;
 
 	private final String title;
 	private final int width;
 	private final int height;
+	// private static final int FPS = 60;
+	private int x;
 	private boolean running;
 
 	public Game(String title, int width, int height) {
@@ -38,9 +42,29 @@ public class Game implements Runnable {
 
 		init();
 
+		// 1e9 (10^9) = 1.000.000.000
+		int fps = 60, ticks = 0;
+		double timePerTick = 1e9 / fps, delta = 0;
+		long now, lastTime = System.nanoTime(), timer = 0;
+
 		while (running) {
-			update();
-			render();
+			now = System.nanoTime();
+			delta += now - lastTime;
+			timer += now - lastTime;
+			lastTime = now;
+
+			if (delta >= timePerTick) {
+				tick();
+				render();
+				ticks++;
+				delta -= timePerTick;
+			}
+
+			if (timer >= 1e9) {
+				System.out.println("Ticks and Frames: " + ticks);
+				ticks = 0;
+				timer = 0;
+			}
 		}
 
 		stop();
@@ -52,14 +76,15 @@ public class Game implements Runnable {
 	 */
 	private void init() {
 		Assets.init();
+		// timer = new FpsTimer(FPS);
 		display = new Display(title, width, height);
 	}
 
 	/**
 	 * Actualiza las posiciones, etc.
 	 */
-	private void update() {
-
+	private void tick() {
+		x++;
 	}
 
 	/**
@@ -81,7 +106,7 @@ public class Game implements Runnable {
 		g.clearRect(0, 0, width, height);
 
 		// Dibuja una imagen
-		g.drawImage(Assets.dirt, 20, 20, null);
+		g.drawImage(Assets.dirt, x, 20, null);
 
 		// Hace visible el buffer
 		buffer.show();

@@ -15,19 +15,19 @@ public class Assets {
 	public static BufferedImage player, dirt, grass, stone, tree;
 	private static final ArrayList<BufferedImage> sprites = new ArrayList<>();
 
-	private static final int sheetWidth = sheet.getSheet().getWidth();
-	private static final int sheetHeight = sheet.getSheet().getHeight();
-	private static final int spriteSize = 32;
+	private static final int SHEET_WIDTH = sheet.getSheet().getWidth();
+	private static final int SHEET_HEIGHT = sheet.getSheet().getHeight();
+	private static final int SPRITE_SIZE = 32;
 
 	/**
 	 * Inicializa los sprites del SpriteSheet.
 	 */
 	public static void init() {
-		player = sheet.crop(0, 0, spriteSize, spriteSize);
-		dirt = sheet.crop(spriteSize, 0, spriteSize, spriteSize);
-		grass = sheet.crop(spriteSize * 2, 0, spriteSize, spriteSize);
-		stone = sheet.crop(spriteSize * 3, 0, spriteSize, spriteSize);
-		tree = sheet.crop(0, spriteSize, spriteSize, spriteSize);
+		player = sheet.crop(0, 0, SPRITE_SIZE, SPRITE_SIZE);
+		dirt = sheet.crop(SPRITE_SIZE, 0, SPRITE_SIZE, SPRITE_SIZE);
+		grass = sheet.crop(SPRITE_SIZE * 2, 0, SPRITE_SIZE, SPRITE_SIZE);
+		stone = sheet.crop(SPRITE_SIZE * 3, 0, SPRITE_SIZE, SPRITE_SIZE);
+		tree = sheet.crop(0, SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE);
 	}
 
 	/**
@@ -37,9 +37,9 @@ public class Assets {
 	 */
 	public static void init2() {
 		// Agrega los sprites de izquierda a derecha como un SpriteSheet tradicional
-		for (int y = 0; y < sheetHeight / spriteSize; y++) {
-			for (int x = 0; x < sheetWidth / spriteSize; x++) {
-				sprites.add(sheet.crop(x * spriteSize, y * spriteSize, spriteSize, spriteSize));
+		for (int y = 0; y < SHEET_HEIGHT / SPRITE_SIZE; y++) {
+			for (int x = 0; x < SHEET_WIDTH / SPRITE_SIZE; x++) {
+				sprites.add(sheet.crop(x * SPRITE_SIZE, y * SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE));
 			}
 		}
 	}
