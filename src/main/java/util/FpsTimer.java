@@ -12,9 +12,9 @@ public class FpsTimer {
 
 	public boolean check() {
 		long now = System.nanoTime();
-		double delta = (now - lastTime) / timePerTick;
+		double delta = now - lastTime;
 
-		if (delta >= 1) {
+		if (delta >= timePerTick) {
 			lastTime = now;
 			return true;
 		} else return false;
