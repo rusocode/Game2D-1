@@ -15,9 +15,6 @@ public class FpsTimer {
 		double delta = now - lastTime;
 
 		if (delta >= timePerTick) {
-			System.out.println("now = " + now);
-			System.out.println("lastTime = " + lastTime);
-			System.out.println("delta = " + delta);
 			lastTime = now;
 			return true;
 		} else return false;
