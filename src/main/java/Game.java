@@ -24,7 +24,7 @@ public class Game implements Runnable {
 	private final String title;
 	private final int width;
 	private final int height;
-	private static final int FPS = 60;
+	private static final int FPS = 1;
 	private int x;
 	private boolean running;
 
@@ -42,20 +42,18 @@ public class Game implements Runnable {
 
 		init();
 
+		// 60 actualizaciones por segundo
+		int fps = 60;
+		/* Miede el tiempo en nanosegundos porque es mucho mas especifico para la computadora. 	 */
+		double timePerTick = 1_000_000_000 / fps;
+
 		while (running) {
 
-			if (timer.check()) {
-				tick();
-				render();
-				// ticks++; // Actualizaciones
-				// delta -= timePerTick;
-			}
+			// if (timer.check()) {
+			tick();
+			render();
+			// }
 
-			/* if (timer >= 1e9) {
-				System.out.println("Ticks and Frames: " + ticks);
-				ticks = 0;
-				timer = 0;
-			} */
 		}
 
 		stop();
