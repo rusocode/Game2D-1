@@ -43,10 +43,10 @@ public class Game implements Runnable {
 		init();
 
 		// Cantidad de veces que llama a tick y render en cada segundo
-		int fps = 60;
+		int fps = 70;
 		/* Calcula la cantidad de tiempo en nanosegundos que hay entre cada frame. El tiempo se mide en nanosegundos
 		 * (1_000_000_000 nanosegundos equivalen a 1 segundo) ya que es una unidad mucho mas especifica para la CPU. */
-		double timePerTick = 1_000_000_000 / fps; // O se puede usar el literal 1e9 para 1_000_000_000
+		double timePerTick = 1_000_000_000 / fps; // O se puede usar el literal 1e9
 		/* Delta time (Δt) es el tiempo transcurrido desde el ultimo frame, o usando otras palabras, es el tiempo entre
 		 * cada frame renderizado. */
 		double delta = 0;
@@ -59,7 +59,7 @@ public class Game implements Runnable {
 			now = System.nanoTime();
 			/* Obtiene el tiempo transcurrido desde la ultima vez que llamamos a esta linea de codigo. Luego divide esa
 			 * cantidad de tiempo por la cantidad maxima de tiempo que podemos tener para llamar a tick y render. */
-			delta += (now - lastTime) / timePerTick;
+			delta += (now - lastTime)/* / timePerTick*/;
 			lastTime = now;
 
 			/* Ahora con el valor delta calculado, el programa sabe cuanto tiempo tiene hasta que tenga que llamar a los
@@ -67,11 +67,11 @@ public class Game implements Runnable {
 
 			/* Si el delta es mayor o igual a 1 segundo, significa que tiene que llamar a tick y render para lograr 60
 			 * frames por segundo. */
-			if (delta >= 1) {
+			if (delta >= timePerTick) {
 				tick();
 				render();
 				// Resta 1 al delta para poder acumular 1 segundo desde 0
-				delta--;
+				delta -= timePerTick;
 			}
 
 		}
