@@ -52,6 +52,7 @@ public class Game implements Runnable {
 		double timePerTick = 1e9 / fps;
 		double delta = 0;
 		long now, lastTime = System.nanoTime(); // Devuelve la hr actual de la PC en nanosegundos
+		int ticks = 0;
 
 		while (running) {
 
@@ -64,6 +65,8 @@ public class Game implements Runnable {
 			// Acumula la diferencia entre la hr actual y ultima sobre timePerTick
 			delta += (now - lastTime) / timePerTick;
 
+			System.out.println("now = " + now + " ____ lastTime " + lastTime);
+
 			lastTime = now;
 
 			/* Si el delta es mayor o igual a 1 segundo, significa que tiene que llamar a tick y render para lograr 60
@@ -73,7 +76,20 @@ public class Game implements Runnable {
 				tick();
 				render();
 				delta--;
+				ticks++;
 			}
+
+			if (ticks >= 60) {
+				System.out.println("Se actualizaron 60 frames en un segundo!");
+				System.out.println("La posicion x del frame esta en " + x);
+				ticks = 0;
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					throw new RuntimeException(e);
+				}
+			}
+
 
 		}
 
@@ -112,7 +128,7 @@ public class Game implements Runnable {
 		// Obtiene el pincel
 		g = buffer.getDrawGraphics();
 
-		// Limpia el rectangulo (ventana) usando el color de fondo actual
+		// Limpia la ventana usando el color de fondo actual
 		g.clearRect(0, 0, width, height);
 
 		// Dibuja una imagen
