@@ -6,9 +6,9 @@ import java.awt.*;
 import java.awt.image.*;
 
 /**
- * Se encarga de manejar la logica del juego a travez del game loop.
+ * Se encarga de manejar la logica del juego a travez del game loop que actua como subproceso.
  * <p>
- * El game loop cuenta con las variables ticks y fps. Los ticks indican cuantas veces el motor del juego se repetira en
+ * El game loop cuenta con las variables ticks y fps. Los ticks indican cuantas veces el motor del juego se repite en
  * un segundo y los FPS señalan cuantas veces el motor de renderizado renderizara una nueva imagen en un segundo.
  */
 
@@ -44,37 +44,35 @@ public class Game implements Runnable {
 
 		init();
 
-		// Cantidad de veces que llama a tick y render en cada segundo
-		int fps = 60;
+		// https://stackoverflow.com/questions/26838286/delta-time-getting-60-updates-a-second-in-java
+		int fps = 60; // Cantidad de veces que llama a tick y render en cada segundo
 		/* Calcula la cantidad de tiempo en nanosegundos que hay entre cada frame. El tiempo se mide en nanosegundos
 		 * (1_000_000_000 nanosegundos equivalen a 1 segundo) ya que es una unidad mucho mas especifica para la CPU.
 		 * TODO El nombre nsBetweenTicks tiene mas sentido. */
-		double timePerTick = 1_000_000_000d / fps; // O se puede usar el literal 1e9
-		/* Delta time (Δt) es el tiempo transcurrido desde el ultimo frame, o usando otras palabras, es el tiempo entre
-		 * cada frame renderizado. */
+		double timePerTick = 1e9 / fps;
 		double delta = 0;
-		// Tiempo del ultimo y actual frame
-		long now;
-		long lastTime = System.nanoTime(); // Devuelve la hr actual de la PC en nanosegundos
+		long now, lastTime = System.nanoTime(); // Devuelve la hr actual de la PC en nanosegundos
 
 		while (running) {
 
 			now = System.nanoTime();
-			/* Obtiene el tiempo transcurrido desde la ultima vez que llamamos a esta linea de codigo. Luego divide esa
-			 * cantidad de tiempo por la cantidad maxima de tiempo que podemos tener para llamar a tick y render. */
-			delta += (now - lastTime)/* / timePerTick*/;
+
+			/* Obtiene el tiempo transcurrido entre cada frame renderizado. Luego divide esa cantidad de tiempo por la
+			 * cantidad maxima de tiempo que podemos tener para llamar a tick y render. Ahora con el valor delta
+			 * calculado, el programa sabe cuanto tiempo tiene hasta que tenga que llamar a los metodos tick y render
+			 * nuevamente. */
+			// Acumula la diferencia entre la hr actual y ultima sobre timePerTick
+			delta += (now - lastTime) / timePerTick;
+
 			lastTime = now;
 
-			/* Ahora con el valor delta calculado, el programa sabe cuanto tiempo tiene hasta que tenga que llamar a los
-			 * metodos tick y render nuevamente. */
-
 			/* Si el delta es mayor o igual a 1 segundo, significa que tiene que llamar a tick y render para lograr 60
-			 * frames por segundo. */
-			if (delta >= timePerTick) {
+			 * frames por segundo. Esto significa que cada vez que se llama a tick(), el programa esperara 16666666
+			 * nanosegundos antes de volver a llamar a tick(). */
+			if (delta >= 1) {
 				tick();
 				render();
-				// Resta 1 al delta para poder acumular 1 segundo desde 0
-				delta -= timePerTick;
+				delta--;
 			}
 
 		}
