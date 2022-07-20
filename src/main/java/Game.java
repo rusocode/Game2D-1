@@ -8,13 +8,15 @@ import java.awt.image.*;
 /**
  * Se encarga de manejar la logica del juego a travez del game loop.
  * <p>
- * La clase BufferStrategy es como una pantalla oculta que se usa para de evitar parpadedos.
- * La clase Graphics seria como un pincel para dibujar en el lienzo.
+ * El game loop cuenta con las variables ticks y fps. Los ticks indican cuantas veces el motor del juego se repetira en
+ * un segundo y los FPS señalan cuantas veces el motor de renderizado renderizara una nueva imagen en un segundo.
  */
 
 public class Game implements Runnable {
 
+	// Es como una pantalla oculta que se usa para de evitar parpadedos
 	private BufferStrategy buffer;
+	// Seria como un pincel para dibujar en el lienzo
 	private Graphics g;
 
 	private Display display;
@@ -43,14 +45,15 @@ public class Game implements Runnable {
 		init();
 
 		// Cantidad de veces que llama a tick y render en cada segundo
-		int fps = 70;
+		int fps = 60;
 		/* Calcula la cantidad de tiempo en nanosegundos que hay entre cada frame. El tiempo se mide en nanosegundos
-		 * (1_000_000_000 nanosegundos equivalen a 1 segundo) ya que es una unidad mucho mas especifica para la CPU. */
-		double timePerTick = 1_000_000_000 / fps; // O se puede usar el literal 1e9
+		 * (1_000_000_000 nanosegundos equivalen a 1 segundo) ya que es una unidad mucho mas especifica para la CPU.
+		 * TODO El nombre nsBetweenTicks tiene mas sentido. */
+		double timePerTick = 1_000_000_000d / fps; // O se puede usar el literal 1e9
 		/* Delta time (Δt) es el tiempo transcurrido desde el ultimo frame, o usando otras palabras, es el tiempo entre
 		 * cada frame renderizado. */
 		double delta = 0;
-		// Variables para calcular el tiempo transcurrido
+		// Tiempo del ultimo y actual frame
 		long now;
 		long lastTime = System.nanoTime(); // Devuelve la hr actual de la PC en nanosegundos
 
