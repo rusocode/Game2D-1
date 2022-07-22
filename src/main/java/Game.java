@@ -44,21 +44,36 @@ public class Game implements Runnable {
 
 		init();
 
-		int ticks = 0;
+		int fps = 80;
+		double timePerTick = 1000000000d / fps;
+		double delta = 0;
+		long now, lastTime = System.nanoTime();
+		int ticks = 0, timer = 0;
 
 		while (running) {
+			now = System.nanoTime();
+			delta += (now - lastTime) / timePerTick;
+			timer += now - lastTime;
+			lastTime = now;
 
-			if (timer.check()) {
+			if (delta >= 1) {
 				tick();
 				render();
+				delta--;
 				ticks++;
 			}
 
-			if (ticks >= 60) {
+			if (timer >= 1000000000) {
+				System.out.println("Ticks and Frames: " + ticks);
+				ticks = 0;
+				timer = 0;
+			}
+
+			/*if (ticks >= 60) {
 				System.out.println("Se actualizaron 60 frames en un segundo!");
 				System.out.println("La posicion x del frame esta en " + x);
 				ticks = 0;
-			}
+			}*/
 
 		}
 
