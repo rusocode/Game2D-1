@@ -69,7 +69,7 @@ public class Game implements Runnable {
 	}
 
 	/**
-	 * Actualiza las posiciones, etc.
+	 * Actualiza las posiciones, procesa la entrada, etc.
 	 */
 	private void tick() {
 		x++;

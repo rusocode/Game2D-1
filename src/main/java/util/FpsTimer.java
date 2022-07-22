@@ -12,40 +12,43 @@ package util;
  * <p>
  * El tiempo para el delta se mide en nanosegundos ya que es una unidad mucho mas especifica para la CPU. Hay
  * 1000000000 nanosegundos en un segundo, lo que significa que la diferencia de tiempo por llamada de tick() aplicando
- * 60 fps, es igual a 1000000000/60, que es aproximadamente 16666666 nanosegundos. Esto significa que cada vez que se
- * llama a tick(), el game loop espera 16666666 nanosegundos antes de volver a llamarlo.
+ * 60 fps, es igual a 1000000000/60, que es aproximadamente 16666666 nanosegundos (tambien conocido como timePerTick).
+ * Esto significa que cada vez que se llama a tick(), el game loop espera 16666666 nanosegundos antes de volver a
+ * llamarlo.
  * <p>
  * Para encontrar el delta, es necesario restar el tiempo en nanosegundos del frame actual y el ultimo frame. El
  * objetivo es hacer que los metodos tick() y render() se activen solo cuando haya pasado 1/60 de segundo, lo que
- * significa que se activan cuando delta >= 1/60 de segundo (tambien conocido como timePerTick). La division ((now -
- * lastTime) / timePerTick), que es innecesaria, solo esta ahi para hacer que el delta actue como un porcentaje decimal
- * de 1 de cuanto ha pasado del tiempo necesario. El 1 representa el 100% de 1/60 fps. Es decir que cuando el valor
- * delta sea >= 1, entonces paso 1/60 de segundo, lo que significa que el game loop ahora puede llamar a los metodos
- * tick() y render() nuevamente. <b>Esto hace posible que el juego se ejecute en cualquier dispositivo a la misma
- * velocidad.</b>
- * <br><br>
- * *"step" es un proceso de calculo del siguiente estado del sistema. "timestep" es el intervalo de tiempo durante el
- * cual la simulacion progresara durante el siguiente "step".
+ * significa que se activan cuando delta >= 1/60 de segundo. La division ((now - lastTime) / timePerTick), que es
+ * innecesaria, solo esta ahi para hacer que el delta actue como un porcentaje decimal de 1 de cuanto ha pasado del
+ * tiempo necesario. El 1 representa el 100% de 1/60 fps. Es decir que cuando el valor delta sea >= 1, entonces paso
+ * 1/60 de segundo, lo que significa que el game loop ahora puede llamar a los metodos tick() y render() nuevamente.
+ * <b>Esto hace posible que el juego se ejecute en cualquier dispositivo a la misma velocidad.</b>
  * <br><br>
  * Fuentes:
  * <br>
  * <a href="https://www.parallelcube.com/es/2017/10/25/por-que-necesitamos-utilizar-delta-time/">¿Por que necesitamos utilizar Delta Time?</a>
  * <a href="https://stackoverflow.com/questions/26838286/delta-time-getting-60-updates-a-second-in-java">Obtener 60 actualizaciones por segundo en Java</a>
- * <a href="https://stackoverflow.com/questions/57710138/why-gameloops-render-more-times-than-updating#:~:text=A%20tick%20is%20whenever%20game,to%20a%20redstone%20circuit%20updating">...</a>
+ * <a href="https://stackoverflow.com/questions/57710138/why-gameloops-render-more-times-than-updating#:~:text=A%20tick%20is%20whenever%20game,to%20a%20redstone%20circuit%20updating">¿Por que el game loop se renderiza mas veces de las que se actualiza?</a>
+ *
+ * @author Juan
  */
 
 public class FpsTimer {
 
 	private int timer, ticks;
-	private final double timestep; // o timePerTick
+	private final double timePerTick;
 	private double delta;
+	// Frame ultimo y actual
 	private long lastTime, now;
 
 	public FpsTimer(int fps) {
-		timestep = 1e9 / fps;
+		timePerTick = 1e9 / fps;
 		lastTime = System.nanoTime();
 	}
 
+	/**
+	 * Se asegura de que el metodo tick() solo se ejecute 60 veces por segundo.
+	 */
 	public boolean check() {
 
 		now = System.nanoTime();
@@ -55,14 +58,13 @@ public class FpsTimer {
 
 		lastTime = now;
 
-		if (delta >= timestep) {
+		if (delta >= timePerTick) {
 			/* Despues de que el delta alcanzo 1/60, simplemente elimine 1/60 de segundo del delta haciendo que comience
 			 * a contar desde el "desbordamiento" de tiempo, hasta que alcance 1/60 de segundo nuevamente. */
-			delta -= timestep;
+			delta -= timePerTick;
 			ticks++;
 			return true;
 		} else return false;
-
 
 	}
 
@@ -76,5 +78,6 @@ public class FpsTimer {
 			timer = 0;
 		}
 	}
+
 }
 
