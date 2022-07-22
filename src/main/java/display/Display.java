@@ -41,9 +41,12 @@ public class Display extends JFrame {
 
 	}
 
+	public void setTitle(String title) {
+		setTitle(title);
+	}
+
 	public Canvas getCanvas() {
 		return canvas;
 	}
-
 
 }

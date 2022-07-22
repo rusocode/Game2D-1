@@ -7,9 +7,6 @@ import java.awt.image.*;
 
 /**
  * Se encarga de manejar la logica del juego a travez del game loop que actua como subproceso.
- * <p>
- * Los nanosegundos no depende del SO, sino del microprocesador y se miden tomando como referencia los ciclos de reloj
- * del procesador.
  */
 
 public class Game implements Runnable {
@@ -72,7 +69,7 @@ public class Game implements Runnable {
 	 * Actualiza las posiciones, procesa la entrada, etc.
 	 */
 	private void tick() {
-		x++;
+		x++; // UPS (Update per second)
 	}
 
 	/**
@@ -98,6 +95,7 @@ public class Game implements Runnable {
 
 		// Hace visible el buffer
 		buffer.show();
+
 		// Elimina este contexto de graficos y libera cualquier recurso del sistema que este utilizando
 		g.dispose();
 
